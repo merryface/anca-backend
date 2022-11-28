@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { Controller, Get, Injectable, Module } from '@nestjs/common';
-import fetch from 'node-fetch';
 import Airtable from 'Airtable'
 const { config } = require('dotenv');
 
@@ -10,16 +9,33 @@ const api_base = process.env.API_BASE
 const base = new Airtable({apiKey: api_key}).base(api_base)
 const table = base('Seminars')
 
-// Handle requests
+const formatDate = (raw) => {
+  let date = raw.split("T")
+  const d = new Date(date[0]).toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"long", day:"numeric"}).replaceAll(',', '')
+  const t = date[1].slice(0,5) + " UTC"
+  return `${d}, ${t}`
+}
+
 @Controller()
 export class AppController {
-  // at endpoint localhost:3000/ or in production yourdomain/
   @Get()
-  async getDitto(): Promise<any> {
-    // const response = await fetch('https://pokeapi.co/api/v2/pokemon/ditto');
-    // return response.json();
+  async getSeminars(): Promise<any> {
     const records = await table.select().all()
-    return records
+    let seminars = []
+
+    records.forEach(record => {
+      let dayTime = record.fields.Date
+      let recordDate = new Date(dayTime as string)
+      if (recordDate >= new Date()) {
+        seminars.push({
+          instructor: record.fields.Instructor,
+          seminar: record.fields.Seminar,
+          date: formatDate(record.fields.Date)
+        })
+      }
+    })
+
+    return seminars
   }
 }
 
