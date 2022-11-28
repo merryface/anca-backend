@@ -15,12 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppController = void 0;
 const core_1 = require("@nestjs/core");
 const common_1 = require("@nestjs/common");
-const Airtable_1 = __importDefault(require("Airtable"));
+const airtable_1 = __importDefault(require("airtable"));
 const { config } = require('dotenv');
 config();
 const api_key = process.env.API_KEY;
 const api_base = process.env.API_BASE;
-const base = new Airtable_1.default({ apiKey: api_key }).base(api_base);
+const base = new airtable_1.default({ apiKey: api_key }).base(api_base);
 const table = base('Seminars');
 const formatDate = (raw) => {
     let date = raw.split("T");

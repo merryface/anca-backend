@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { Controller, Get, Injectable, Module } from '@nestjs/common';
-import Airtable from 'Airtable'
+import Airtable from 'airtable'
 const { config } = require('dotenv');
 
 config();
