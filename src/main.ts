@@ -47,6 +47,6 @@ class AppModule {}
 async function main() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
-  await app.listen(80);
+  await app.listen(443);
 }
 main();
